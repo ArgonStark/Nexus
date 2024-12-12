@@ -31,14 +31,11 @@ SECOND_SCRIPT="sed -i 's/.*/$PROVER_ID/' .nexus/prover-id && sudo systemctl rest
 echo_colored "$BLUE" "Starting the execution of the first script on all servers..."
 for SERVER in "${SERVER_IPS[@]}"; do
     echo_colored "$YELLOW" "Connecting to server $SERVER"
-    ssh "root@$SERVER" <<EOF
-        echo "Executing first script on $SERVER"
-        $FIRST_SCRIPT
-EOF
+    ssh "root@$SERVER" "screen -dmS nexus_setup bash -c '$FIRST_SCRIPT'"
     if [ $? -eq 0 ]; then
-        echo_colored "$GREEN" "Successfully executed on $SERVER"
+        echo_colored "$GREEN" "Successfully started first script on $SERVER in a detached screen."
     else
-        echo_colored "$RED" "Failed to execute on $SERVER"
+        echo_colored "$RED" "Failed to start first script on $SERVER"
     fi
     echo ""
 done
@@ -51,14 +48,11 @@ sleep $((15 * 60))
 echo_colored "$BLUE" "Starting the execution of the second script on all servers..."
 for SERVER in "${SERVER_IPS[@]}"; do
     echo_colored "$YELLOW" "Connecting to server $SERVER"
-    ssh "root@$SERVER" <<EOF
-        echo "Executing second script on $SERVER"
-        $SECOND_SCRIPT
-EOF
+    ssh "root@$SERVER" "screen -dmS nexus_setup bash -c '$SECOND_SCRIPT'"
     if [ $? -eq 0 ]; then
-        echo_colored "$GREEN" "Successfully executed on $SERVER"
+        echo_colored "$GREEN" "Successfully started second script on $SERVER in a detached screen."
     else
-        echo_colored "$RED" "Failed to execute on $SERVER"
+        echo_colored "$RED" "Failed to start second script on $SERVER"
     fi
     echo ""
 done
