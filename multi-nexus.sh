@@ -31,8 +31,9 @@ SECOND_SCRIPT="sed -i 's/.*/$PROVER_ID/' .nexus/prover-id && sudo systemctl rest
 echo_colored "$BLUE" "Starting the execution of the first script on all servers..."
 for SERVER in "${SERVER_IPS[@]}"; do
     echo_colored "$YELLOW" "Connecting to server $SERVER"
-    ssh "$SERVER" <<EOF
-    $FIRST_SCRIPT
+    ssh "root@$SERVER" <<EOF
+        echo "Executing first script on $SERVER"
+        $FIRST_SCRIPT
 EOF
     if [ $? -eq 0 ]; then
         echo_colored "$GREEN" "Successfully executed on $SERVER"
@@ -50,8 +51,9 @@ sleep $((15 * 60))
 echo_colored "$BLUE" "Starting the execution of the second script on all servers..."
 for SERVER in "${SERVER_IPS[@]}"; do
     echo_colored "$YELLOW" "Connecting to server $SERVER"
-    ssh "$SERVER" <<EOF
-    $SECOND_SCRIPT
+    ssh "root@$SERVER" <<EOF
+        echo "Executing second script on $SERVER"
+        $SECOND_SCRIPT
 EOF
     if [ $? -eq 0 ]; then
         echo_colored "$GREEN" "Successfully executed on $SERVER"
